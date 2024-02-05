@@ -324,8 +324,6 @@ new_role15["character_name"] = "Selina Kyle"
 
 new_role15.save
 
-puts new_role15.inspect
-
 # Prints a header for the movies output
 puts "Movies"
 puts "======"
@@ -334,14 +332,18 @@ puts ""
 # Query the movies data and loop through the results to display the movies output.
 # TODO!
 
-studio_movies = Movie.where({"studio_id" => warner_bros["id"]})
+movies = Movie.where("studio_id" => warner_bros["id"])
 
-# puts studio_movies.inspect
 
-for movie in studio_movies
-    puts "#{movie["name"] movie["year_released"] movie["rated"] movie["studio_id"]}"
+for movie in movies
+    movie_name = movie["title"]
+    movie_year_released = movie["year_released"]
+    movie_rated = movie["rated"]
+    studio = Studio.find_by({"id" => movie["studio_id"]})
+    studio_name = studio["name"]
+
+    puts "#{movie_name} #{movie_year_released} #{movie_rated} #{studio_name}"
 end
-
 
 # Prints a header for the cast output
 puts ""
@@ -351,4 +353,14 @@ puts ""
 
 # Query the cast data and loop through the results to display the cast output for each movie.
 # TODO!
+roles = Role.all
 
+for role in roles
+    movie = Movie.find_by({"id" => role["movie_id"]})
+    movie_name = movie["title"]
+    actor = Actor.find_by({"id" => role["actor_id"]})
+    actor_name = actor["name"]
+    role_name = role["character_name"]
+    
+    puts "#{movie_name} #{actor_name} #{role_name}"
+end
